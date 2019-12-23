@@ -5,13 +5,16 @@ import operator
 import matplotlib.pyplot as plt
 from AgentFrameWork import Agent
 import sys
+from matplotlib.animation import FuncAnimation 
 
 try: num_of_agents = int(sys.argv[1])
 except: num_of_agents = 10
 try: num_of_iteration = int(sys.argv[2])
 except: num_of_iteration = 100
-try:visual_on = eval(sys.argv[4].title())
-except:visual_on = True 
+try : neighbourhood = int(sys.argv[3])
+except: neighbourhood = 20 
+#try:visual_on = eval(sys.argv[4].title())
+#except:visual_on = True 
 
 #def distance_between(agents_row_a, agents_row_b):
 #    return (((agents_row_a.y - agents_row_b.y)**2) +
@@ -26,6 +29,34 @@ except:visual_on = True
 agents = []
 environment = []
 
+fig = plt.figure()
+carry_on = True 
+
+def update(frame_qty):
+    global carry_on
+    
+    fig.clear()
+    # Move the agents.
+    for j in range(num_of_iteration):
+        shuffle(agents)
+        for i in range(num_of_agents):
+            agents[i].move()
+            agents[i].eat()
+            agents[i].share_with_neighbours(neighbourhood)
+            # print(agents[i])
+    for i in range(num_of_agents):
+        plt.scatter(agents[i].y,agents[i].x)
+    plt.imshow(environment)
+    for agent in agents:
+        if agent.store <6000:
+            return
+        
+        carry_on = False 
+        
+def gen_function():
+    while carry_on:
+        yield 1 
+        
 with open("in.txt") as file: 
     for line in file:
         row = list(eval(line))
@@ -33,21 +64,13 @@ with open("in.txt") as file:
 # Make the agents.
 for i in range(num_of_agents):
     agents.append(Agent(environment, agents))
-# Move the agents.
-for j in range(num_of_iterations):
-    shuffle(agents)
-    for i in range(num_of_agents):
-        agents[i].move()
-        agents[i].eat()
-        agents[i].share_with_neighbours(neighbourhood)
+
         
-if visual_on:        
-    plt.xlim(0, len(environment) -1)
-    plt.ylim(0, len(environment) -1)
-    for i in range(num_of_agents):
-        plt.scatter(agents[i].y,agents[i].x)
-    plt.imshow(environment)
-    plt.show()
+  
+plt.xlim(0, len(environment) -1)
+plt.ylim(0, len(environment) -1)
+animation = FuncAnimation (fig, update , frames= gen_function,  repeat=False)
+plt.show()
 #for agents_row_a in agents:
 #    for agents_row_b in agents:
 #        distance = distance_between(agents_row_a, agents_row_b)

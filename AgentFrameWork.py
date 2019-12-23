@@ -1,7 +1,7 @@
 
 from random import randint , random 
 class Agent: 
-        def __init__(self, environment,agents):
+    def __init__(self, environment,agents):
         self.x = randint (0, len(environment) -1)
         self.y = randint (0, len(environment) -1)
         self.environment = environment
@@ -21,14 +21,14 @@ class Agent:
     def eat(self):
         if self.environment[self.y][self.x] > 10:
             self.environment[self.y][self.x] -= 10
-            self.store +=10
+            self.store += 4 
         else:
             self.store += self.environment[self.y][self.x]
             self.environment[self.y][self.x] = 0
         
-        if self.store > 100:
-            self.environment[self.y][self.x] += self.store
-            self.store = 0 
+#        if self.store > 100:
+#            self.environment[self.y][self.x] += self.store
+#            self.store = 0 
     def __str__(self):
         return f"x: {self.x}, y:{self.y}, store:{self.store}"    
     def share_with_neighbours (self,neighbourhood):
@@ -38,7 +38,7 @@ class Agent:
                 average_store = (self.store + agent.store) /2
                 self.store = average_store
                 agent.store = average_store
-                print("sharing " + str(score) + " " + str(average_store))
+#                print("sharing " + str(score) + " " + str(average_store))
               
     def distance_between(self, agent):
         return ((self.y - agent.y)**2 +(self.x - agent.x)**2)**0.5    
