@@ -1,9 +1,9 @@
 
 from random import randint , random 
 class Agent: 
-    def __init__(self, environment,agents):
-        self.x = randint (0, len(environment) -1)
-        self.y = randint (0, len(environment) -1)
+    def __init__(self, environment,agents, y, x):
+        self.x = x
+        self.y = y 
         self.environment = environment
         self.store = 0 
         self.agents = agents
@@ -12,12 +12,13 @@ class Agent:
         if random() < 0.5:
             self.y = (self.y + 1) % len(self.environment)
         else:
-            self.x = (self.x - 1) % len(self.environment)
+            self.y = (self.y - 1) % len(self.environment)
 
         if random() < 0.5:
-            self.y = (self.y + 1) % len(self.environment)
+            self.x = (self.x + 1) % len(self.environment)
         else:
             self.x = (self.x - 1) % len(self.environment)
+            
     def eat(self):
         if self.environment[self.y][self.x] > 10:
             self.environment[self.y][self.x] -= 10
